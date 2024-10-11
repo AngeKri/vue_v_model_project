@@ -1,4 +1,20 @@
+<script setup>
+import {ref} from "vue";
+
+// State
+const products = ref(null);
+
+//Hent data 
+fetch("https://mahauser2.github.io/productsDummyJson/products.json")
+.then (res => res.json())
+.then (data => products.value = data)
+.catch(err => console.log("ERROR:", err))
+
+
+</script>
+
 <template>
+
   <!-- 1: Start out by fetching the products from https://mahauser2.github.io/productsDummyJson/products.json - store the fetched data in state  -->
 
   <!-- 2: Make the .card (the div further down) dynamic - we need one card for each object in the products array -->
@@ -37,32 +53,29 @@
         <label for="email">email:</label>
         <input type="email" id="email" name="email" placeholder="Email:" required />
       </div>
-      <button>Sign Up</button>
+      <button>Sign Up</button> 
     </form>
   </div>
   <div class="product-wrapper center">
-    <div class="card">
+    <div v-for="product in products" :key="product.id" class="card">
       <div class="product">
         <div class="product-image">
-          <img src="https://raw.githubusercontent.com/mahaUser2/productsDummyJson/main/81fPKd-2AYL._AC_SL1500_.jpg" alt="Some bag" />
+          <img :src="product.image" :alt="product.title" />
         </div>
         <div class="product-info">
           <header>
-            <h3>Taske</h3>
-            <p class="price">2000000kr</p>
-            <p class="category">Taske</p>
+            <h3> {{ product.title }}</h3>
+            <p class="price">{{product.price}} kr,-</p>
+            <p class="category">{{product.category}}</p>
           </header>
-          <p class="description">Her er en taske</p>
-          <p class="stock">In stock: 300</p>
+          <p class="description">{{product.description}}</p>
+          <p class="stock">In stock: {{ product.rating.count }}</p>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-// State
-</script>
 
 <style scoped>
 .center {
