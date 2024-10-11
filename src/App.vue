@@ -58,18 +58,19 @@ fetch("https://mahauser2.github.io/productsDummyJson/products.json")
   </div>
   <div class="product-wrapper center">
     <div v-for="product in products" :key="product.id" class="card">
-      <div class="product">
+      <span v-if="product.category =='electronics'" class="rotate">On Sale</span>
+      <div class="product"> 
         <div class="product-image">
           <img :src="product.image" :alt="product.title" />
         </div>
         <div class="product-info">
           <header>
-            <h3> {{ product.title }}</h3>
-            <p class="price">{{product.price}} kr,-</p>
+            <h3 :class="{featured : product.category =='electronics'}" > {{ product.title }}</h3>
+            <p class="price">${{product.price.toFixed(2)}}</p>
             <p class="category">{{product.category}}</p>
           </header>
           <p class="description">{{product.description}}</p>
-          <p class="stock">In stock: {{ product.rating.count }}</p>
+          <p class="stock" :class="{red : product.rating.count < 100, green : product.rating.count > 300}">In stock: {{ product.rating.count }}</p>
         </div>
       </div>
     </div>
