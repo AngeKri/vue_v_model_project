@@ -3,6 +3,12 @@ import {ref} from "vue";
 
 // State
 const products = ref(null);
+const newsletterUser = ref({
+  username: null,
+  email: null
+});
+const registeredUsers = ref([]);
+
 
 //Hent data 
 fetch("https://mahauser2.github.io/productsDummyJson/products.json")
@@ -10,6 +16,26 @@ fetch("https://mahauser2.github.io/productsDummyJson/products.json")
 .then (data => products.value = data)
 .catch(err => console.log("ERROR:", err))
 
+
+//Functions
+function signUpNewsletter() {
+  //Alert bruger
+  alert(`Congrats ${newsletterUser.value.username} your email ${newsletterUser.value.email} is now subscribed to our newsletter`)
+  
+  //Tilføj bruger til state/registeredUsers
+  registeredUsers.value.push(newsletterUser.value)
+
+  // Reset newsletterUser
+  newsletterUser.value = {
+    username: null,
+    email: null
+  }
+
+  //Log registeredUsers
+  console.log(registeredUsers.value)
+
+
+}
 
 </script>
 
@@ -44,14 +70,14 @@ fetch("https://mahauser2.github.io/productsDummyJson/products.json")
 
   <div class="newsletter center">
     <p>Sign up for our newsletter here!</p>
-    <form>
+    <form @submit.prevent="signUpNewsletter" >
       <div>
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" placeholder="Username:" required />
+        <input v-model="newsletterUser.username" type="text" id="username" name="username" placeholder="Username:" required />
       </div>
       <div>
         <label for="email">email:</label>
-        <input type="email" id="email" name="email" placeholder="Email:" required />
+        <input v-model="newsletterUser.email" type="email" id="email" name="email" placeholder="Email:" required />
       </div>
       <button>Sign Up</button> 
     </form>
